@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 
 import {GrowingInput} from 'sentry/components/growingInput';
 import {TabsContext} from 'sentry/components/tabs';
+import {Tooltip} from 'sentry/components/tooltip';
 
 interface EditableTabTitleProps {
   isEditing: boolean;
@@ -101,13 +102,24 @@ function EditableTabTitle({
       onMouseDown={e => {
         e.stopPropagation();
       }}
+      maxLength={128}
     />
   ) : (
-    <div style={{height: '20px'}}>{label}</div>
+    <Tooltip title={label} disabled={label.length <= 50}>
+      <TruncatedText>{label}</TruncatedText>
+    </Tooltip>
   );
 }
 
 export default EditableTabTitle;
+
+const TruncatedText = styled('div')`
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 20px;
+`;
 
 const StyledGrowingInput = styled(GrowingInput)<{
   isEditing: boolean;
